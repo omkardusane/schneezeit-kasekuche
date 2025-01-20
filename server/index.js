@@ -1,15 +1,14 @@
-// import Fastify from 'fastify'
-// const fastify = Fastify({
-//   logger: true
-// })
-const fastify = require('fastify')({ logger: true })
+import { buildApp } from "./src/app.js";
 
-fastify.get('/', function handler (request, reply) {
-  return { hello: 'world' }
-})
-
-  fastify.listen({ port: 3000 }).then().catch((err)=>{
-    fastify.log.error(err)
-    process.exit(1)
-  
-  })
+(async () => {
+  try {
+    const app = await buildApp();
+    // Start server
+    const PORT = process.env.PORT || 3000;
+    await app.listen({ port: PORT, host: "0.0.0.0" });
+    console.log(`Server running on http://localhost:${PORT}`);
+  } catch (err) {
+    console.error("Error starting server:", err);
+    process.exit(1);
+  }
+})();
